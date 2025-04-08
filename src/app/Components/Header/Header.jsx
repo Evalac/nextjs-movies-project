@@ -1,8 +1,14 @@
 "use client";
-
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useEffect } from "react";
 import HeaderSearchForm from "./HeaderSearchForm";
 
 export default function Header() {
+  useEffect(() => {
+    // Динамічний імпорт JS лише на клієнті
+    import("bootstrap/dist/js/bootstrap.bundle.min.js");
+  }, []);
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">

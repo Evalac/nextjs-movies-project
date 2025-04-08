@@ -62,17 +62,23 @@ export default function HomeMain(params) {
           </li>
           <li className="page-item">
             <a className="page-link" href="#">
-              {page - 1}
+              {page === 1 ? 1 : page - 1}
             </a>
           </li>
           <li className="page-item">
             <a className="page-link" href="#">
-              {page}
+              {page === 1 ? page + 1 : page}
             </a>
           </li>
           <li className="page-item">
-            <a className="page-link" href="#">
-              {page + 1}
+            <a
+              className="page-link"
+              href="#"
+              onClick={() => {
+                setPage((prevState) => (prevState = page + 1));
+              }}
+            >
+              {page === 1 ? page + 2 : page + 1}
             </a>
           </li>
           <li className="page-item">
