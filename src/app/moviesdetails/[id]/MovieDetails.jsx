@@ -7,6 +7,7 @@ import Link from "next/link";
 
 export default function MovieDetails() {
   const [moviesDetails, setMoviesDetails] = useState(null); // спочатку null
+  const [moviesCredits, setMoviesCredits] = useState(null);
   const [loading, setLoading] = useState(true); // додали стан завантаження
   const [error, setError] = useState(null); // для зберігання помилок
   const [activeTab, setActiveTab] = useState("none");
@@ -70,24 +71,64 @@ export default function MovieDetails() {
         <div className="card-footer">
           <button
             className="btn btn-outline-primary me-2"
-            onClick={() => setActiveTab("actors")}
+            onClick={() => {
+              activeTab === "actors"
+                ? setActiveTab("none")
+                : setActiveTab("actors");
+
+              if (activeTab === "actors") {
+                return;
+              }
+              fetchRequestMovies(`${id}/credits`)
+                .then((data) => {
+                  setMoviesCredits(data);
+                })
+                .catch((error) => setError(error));
+            }}
           >
             Actors
           </button>
 
           <button
             className="btn btn-outline-secondary"
-            onClick={() => setActiveTab("similar")}
+            onClick={() => {
+              setActiveTab("similar");
+            }}
           >
             Similar Movies
           </button>
         </div>
         <div className="card-body">
           {activeTab === "actors" && (
-            <div>
-              <h5>Actors (coming soon)</h5>
-              <p>Тут буде список акторів…</p>
-            </div>
+            <ul
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              {moviesCredits &&
+                moviesCredits.cast.map((cast) => (
+                  <li
+                    key={cast.id}
+                    style={{
+                      border: "solid 2px black",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <img
+                      width="150px"
+                      src={`https://image.tmdb.org/t/p/w500${cast.profile_path}`}
+                      alt=""
+                    />
+
+                    <p>{cast.name}</p>
+                    <p>{cast.character}</p>
+                    <p></p>
+                  </li>
+                ))}
+            </ul>
           )}
           {activeTab === "similar" && (
             <div>
