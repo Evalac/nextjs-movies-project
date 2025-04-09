@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { fetchRequestMovies } from "@/service/apiMovies";
 import { useParams } from "next/navigation";
-import Link from "next/link";
 
 export default function MovieDetails() {
   const [moviesDetails, setMoviesDetails] = useState(null); // спочатку null
@@ -18,8 +17,7 @@ export default function MovieDetails() {
     fetchRequestMovies(`${id}`)
       .then((data) => {
         if (data) {
-          setMoviesDetails(data); // зберігаємо лише перший елемент
-          console.log(data);
+          setMoviesDetails(data);
         } else {
           setMoviesDetails(null); // якщо даних немає, ставимо null
         }
@@ -54,7 +52,7 @@ export default function MovieDetails() {
         <div className="row g-0">
           <div className="col-md-4">
             <img
-              src={`https://image.tmdb.org/t/p/w500${moviesDetails.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w500${moviesDetails.poster_path} `}
               className="img-fluid rounded-start"
               alt="poster"
             />

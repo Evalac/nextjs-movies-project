@@ -1,22 +1,12 @@
-"use client";
-
 import { fetchRequestMovies } from "@/service/apiMovies";
+import PaginationNav from "./PaginationNav";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-
-export default function HomeMain(params) {
-  const [page, setPage] = useState(1);
-  const [moviesData, setMoviesData] = useState([]);
-
-  useEffect(() => {
-    fetchRequestMovies("popular", `&page=${page}`)
-      .then((data) => {
-        if (data.results) {
-          setMoviesData(data.results);
-        }
-      })
-      .catch((error) => console.log(error));
-  }, [page]);
+// в кліенських компонентах де треба робити запити робимо асинхролнні функціїї
+export default async function HomeMain(params) {
+  const page = parseInt(params.page) || 1;
+  console.log(" page: ", page);
+  const data = await fetchRequestMovies("popular", `&page=${page}`);
+  const movies = data?.results || [];
 
   return (
     <div className="container-lg">
@@ -24,7 +14,7 @@ export default function HomeMain(params) {
         className="row row-cols-1 row-cols-md-5 g-4"
         style={{ marginBottom: "20px" }}
       >
-        {moviesData.map((movie) => (
+        {movies.map((movie) => (
           <div key={movie.id} className="col">
             <Link
               href={`/moviesdetails/${movie.id}`}
@@ -44,56 +34,7 @@ export default function HomeMain(params) {
           </div>
         ))}
       </div>
-
-      <nav
-        aria-label="Page navigation example"
-        style={{ marginBottom: "20px" }}
-      >
-        <ul className="pagination justify-content-center">
-          <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
-            <a
-              className="page-link"
-              onClick={() => {
-                setPage((prevState) => prevState - 1);
-              }}
-            >
-              Previous
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              {page === 1 ? 1 : page - 1}
-            </a>
-          </li>
-          <li className="page-item">
-            <a className="page-link" href="#">
-              {page === 1 ? page + 1 : page}
-            </a>
-          </li>
-          <li className="page-item">
-            <a
-              className="page-link"
-              href="#"
-              onClick={() => {
-                setPage((prevState) => (prevState = page + 1));
-              }}
-            >
-              {page === 1 ? page + 2 : page + 1}
-            </a>
-          </li>
-          <li className="page-item">
-            <a
-              className="page-link"
-              onClick={() => {
-                setPage((prevState) => prevState + 1);
-              }}
-              href="#"
-            >
-              Next
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <PaginationNav page={page} />
     </div>
   );
 }
