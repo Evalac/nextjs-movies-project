@@ -5,6 +5,7 @@ export default function Home() {
   return (
     <div>
       <p>dfsf</p>
+      <h1>Test</h1>
       <HomeMain />
     </div>
   );
